@@ -1,7 +1,6 @@
 # Apostila Completa de Claude
 
-Apostila técnica e didática sobre **Claude** (Anthropic) — do modelo de linguagem por baixo
-até a arquitetura de agentes, o Claude Code, o MCP e a operação em produção. Escrita para quem
+Essa apostila sobre **Claude** (Anthropic) que estou usando para meus estudos de IA, está sendo escrita para quem
 quer entender Claude de verdade, não apenas apertar botões.
 
 Serve também como material de estudo para a certificação **Claude Certified Architect –
@@ -25,7 +24,8 @@ Mais um **Apêndice** com glossário e recursos úteis.
 
 ## Autoria
 
-Carlos Alvar de M. S. Quintella e Anthropic Claude.
+Carlos Alvaro de M. S. Quintella
+using: Anthropic Claude.
 
 ## Licença
 
