@@ -8,7 +8,7 @@
 
 Por:
 
-Carlos Alvar de M. S. Quintella e
+Carlos Alvaro de M. S. Quintella e
 Antropic Claude
 
 > **Anti-copyright — uso livre.** Esta obra é liberada deliberadamente de qualquer
