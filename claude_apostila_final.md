@@ -90,13 +90,19 @@ Tudo o que estiver fora da mesa simplesmente não existe para ele. Os modelos Cl
 trabalham com janelas grandes — até 1 milhão de tokens nos modelos de ponta —, o que é
 muito, mas não é infinito, e enchê-la tem custo e custa latência.
 
+### Revolução dos Transformers
+
+... 
+
 ### LLM vs Chatbot
 
+<reescrever>
 Confundir o LLM com o chatbot é como confundir o motor com o carro. O **LLM é o motor**:
 uma função que transforma tokens de entrada em tokens de saída. Ele não tem memória entre
 chamadas, não tem botões, não tem tela. O **chatbot é o carro inteiro**: a interface de
 conversa, o histórico que é reenviado a cada turno, os botões de anexar arquivo, o sistema
 que decide quando buscar na web.
+</reescrever>
 
 Entre os dois há **camadas de abstração**. O chatbot guarda o histórico e o reempacota; uma
 camada de orquestração decide quais ferramentas oferecer; uma camada de API expõe tudo isso
@@ -104,8 +110,13 @@ de forma programável. Entender essa separação evita confusões clássicas —
 achar que o modelo "lembra" da conversa de ontem. Ele não lembra; o chatbot é que reenvia o
 contexto. O modelo, a cada chamada, parte do zero.
 
+### O que exatamente é o contexto
+
+...
+
 ### Code Interpreters e Capacidades de Código
 
+<melhorar reason="Não está claro">
 LLMs são surpreendentemente bons com código porque código é texto altamente estruturado e
 abundante no treinamento. Mas escrever código e _executar_ código são coisas diferentes.
 Quando um modelo apenas escreve, ele pode estar enganado — o código parece certo e não
@@ -117,6 +128,8 @@ completar o que você começou a digitar. **Code generation** é produzir um tre
 partir de uma descrição. E **code explanation/refactoring** é ler código existente e
 explicá-lo ou reestruturá-lo. São tarefas distintas, com prompts distintos, e o leitor que
 souber qual está pedindo obterá resultados muito melhores.
+
+</melhorar>
 
 ## O que é Claude
 
@@ -130,9 +143,14 @@ segundo um conjunto explícito de princípios — uma "constituição". O objeti
 que seja útil, honesto e inofensivo, nessa ordem de prioridade quando há conflito.
 
 Na prática, isso se traduz numa postura de **safety first**: Claude tende a recusar pedidos
-genuinamente perigosos, mas — e isso é um ponto fino — os modelos recentes erram menos para
+que parecem perigosos, mas — e isso é um ponto fino — os modelos recentes erram menos para
 o lado do "recuso por precaução". Ser honesto sobre limitações é parte do design: Claude
 admite quando não sabe, em vez de inventar com confiança.
+
+<reesecrever: elaborar em nova sessão>
+Infelizmente, ultimamente, com advento do Fable 5, as coisas j;a não são claras para o usuário, e a tendência é ficar ainda pior, enquanto Governos correm para regular e restrigir o uso de IA, diferentes Governos terão diferentes legislações. A solução é uma IA etremamente restrita ou cada Governo ter sua própria IA.
+
+</reescrever>
 
 ### Linhagem de Modelos Disponíveis
 
@@ -156,11 +174,13 @@ ativos, com suas características de referência:
 
 Há ainda o **Claude Mythos 5**, que tem as mesmas capacidades, preço e comportamento de API
 do Fable 5, mas só é acessível através de um programa específico (Project Glasswing). Para
-quase todo mundo, o "modelo mais capaz" é o Fable 5.
+quase todo mundo, o "modelo mais capaz" ia ser o Fable 5, até o Governo dos Estadudos UNidos Restringir o acesso.
 
+<melhorar críticas: contexto nao está completo, qual o objetivo disto aqui?>
 Um detalhe que economiza dor de cabeça: os identificadores de modelo são strings exatas
 (`claude-opus-4-8`, `claude-sonnet-4-6`, `claude-fable-5`). Não invente sufixos de data nem
 "melhore" o nome — um ID errado simplesmente devolve erro 404.
+</melhorar>
 
 Quanto ao **roadmap e futuro**: a Anthropic libera modelos novos com regularidade, e a regra
 prática é "use o mais recente da sua faixa, a menos que tenha um motivo explícito para fixar
