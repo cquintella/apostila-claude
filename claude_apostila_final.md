@@ -1,5 +1,8 @@
 # Apostila Completa de Claude
 
+> *“Os limites da minha linguagem significam os limites do meu mundo.”*
+> — Ludwig Wittgenstein, *Tractatus Logico-Philosophicus*
+
 > Esta apostila foi escrita para quem quer entender Claude de verdade — não apenas
 > apertar botões, mas saber o que acontece por baixo, por que acontece, e como tirar
 > proveito disso. O estilo é deliberadamente direto: explicamos o conceito, mostramos
