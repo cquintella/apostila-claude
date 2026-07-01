@@ -95,17 +95,31 @@ muito, mas não é infinito, e enchê-la tem custo e custa latência.
 
 ### Revolução dos Transformers
 
-... 
+Nada disso seria possível sem a arquitetura que sustenta os LLMs modernos: o **Transformer**,
+apresentado em 2017 no artigo "Attention Is All You Need". Antes dele, os modelos de linguagem
+processavam o texto palavra por palavra, em sequência — o que os tornava lentos de treinar e
+esquecidos com dependências longas. O Transformer trocou esse processamento sequencial por um
+mecanismo chamado **atenção** (attention): em vez de ler em fila, o modelo olha para todos os
+tokens de uma vez e pesa, para cada um, quais dos demais são relevantes. A palavra "ela", por
+exemplo, consegue "prestar atenção" no nome citado dez linhas antes.
+
+Duas consequências dessa mudança explicam por que os LLMs decolaram. Primeiro, como a atenção
+processa a sequência inteira em paralelo, o treinamento passou a escalar bem em GPUs — foi o que
+tornou viável treinar modelos com bilhões de parâmetros sobre boa parte do texto da internet.
+Segundo, a atenção captura relações de longa distância que as arquiteturas antigas perdiam, e é
+daí que vem a coerência que faz um LLM parecer "inteligente". Todo modelo Claude é, no fundo, uma
+pilha de camadas de atenção — o mesmo mecanismo que reaparece no Capítulo 8, quando falamos de
+_attention_ e do efeito "perdido no meio".
 
 ### LLM vs Chatbot
 
-<reescrever>
-Confundir o LLM com o chatbot é como confundir o motor com o carro. O **LLM é o motor**:
-uma função que transforma tokens de entrada em tokens de saída. Ele não tem memória entre
-chamadas, não tem botões, não tem tela. O **chatbot é o carro inteiro**: a interface de
-conversa, o histórico que é reenviado a cada turno, os botões de anexar arquivo, o sistema
-que decide quando buscar na web.
-</reescrever>
+Confundir o LLM com o chatbot é como confundir o motor com o carro — e essa confusão está por
+trás de metade dos mal-entendidos sobre IA. O **LLM é o motor**: uma função pura que recebe
+tokens de entrada e devolve tokens de saída, e nada mais. Não tem memória entre chamadas, não tem
+tela, não tem botão de anexar arquivo, não decide sozinho buscar na web. O **chatbot é o carro
+inteiro**: a interface de conversa, o histórico que _alguém_ reenvia a cada turno, os anexos e a
+lógica que resolve quando acionar uma ferramenta. O motor é o mesmo em toda parte; o que muda de
+um produto para outro é o carro construído em volta dele.
 
 Entre os dois há **camadas de abstração**. O chatbot guarda o histórico e o reempacota; uma
 camada de orquestração decide quais ferramentas oferecer; uma camada de API expõe tudo isso
@@ -115,24 +129,36 @@ contexto. O modelo, a cada chamada, parte do zero.
 
 ### O que exatamente é o contexto
 
-...
+Já que o modelo "parte do zero" a cada chamada, vale definir com precisão o que é o **contexto**,
+porque é um dos conceitos que mais geram confusão. Contexto é _tudo o que você envia em uma única
+chamada_: o system prompt (as instruções de fundo), o histórico completo da conversa até ali, a
+mensagem atual do usuário e, quando existem, as definições e os resultados das ferramentas. É esse
+pacote inteiro que o modelo lê, do começo, antes de gerar cada resposta.
+
+O que o modelo sabe, então, vem de duas fontes bem distintas. Uma é o **treinamento**: o
+conhecimento geral cristalizado nos pesos quando o modelo foi criado — fixo e com data de corte. A
+outra é o **contexto**: o que você entrega naquela chamada específica — fresco, mas efêmero, porque
+some quando a conversa termina. Sempre que Claude parece "não saber" algo que você mencionou antes,
+a pergunta certa é: isso ainda estava no contexto _desta_ chamada? Fixar essa distinção prepara o
+terreno para a diferença entre contexto e memória, que retomamos no Capítulo 3.
 
 ### Code Interpreters e Capacidades de Código
 
-<melhorar reason="Não está claro">
-LLMs são surpreendentemente bons com código porque código é texto altamente estruturado e
-abundante no treinamento. Mas escrever código e _executar_ código são coisas diferentes.
-Quando um modelo apenas escreve, ele pode estar enganado — o código parece certo e não
-roda. Por isso existem os **code interpreters**: ambientes isolados (sandboxes) onde o
-código que o modelo escreve é de fato executado, e o resultado volta para o modelo.
+LLMs são surpreendentemente bons com código, e a razão é simples: código é texto altamente
+estruturado, e havia muito dele no treinamento. Mas aqui mora uma armadilha que vale deixar
+explícita — **escrever código e executar código são coisas diferentes**. Um modelo pode produzir
+um trecho que parece impecável e não roda, porque ele previu um texto plausível, não verificou uma
+execução. É esse buraco que o **code interpreter** preenche: um ambiente isolado (sandbox) onde o
+código que o modelo escreve é de fato rodado, e o resultado — inclusive a mensagem de erro — volta
+para o modelo, que então corrige. Escrever é prever; o interpretador transforma previsão em
+verificação.
 
-Vale distinguir três capacidades que frequentemente se misturam. **Code completion** é
-completar o que você começou a digitar. **Code generation** é produzir um trecho inteiro a
-partir de uma descrição. E **code explanation/refactoring** é ler código existente e
-explicá-lo ou reestruturá-lo. São tarefas distintas, com prompts distintos, e o leitor que
-souber qual está pedindo obterá resultados muito melhores.
-
-</melhorar>
+Separado disso, há três _capacidades_ de código que costumam ser confundidas entre si, e nomeá-las
+ajuda a pedir a coisa certa. **Code completion** é completar o que você já começou a digitar.
+**Code generation** é produzir um trecho inteiro a partir de uma descrição em linguagem natural. E
+**code explanation/refactoring** é ler um código que já existe para explicá-lo ou reestruturá-lo.
+São três tarefas distintas, com prompts distintos — e quem sabe qual das três está pedindo obtém
+resultados muito melhores.
 
 ## O que é Claude
 
@@ -150,10 +176,14 @@ que parecem perigosos, mas — e isso é um ponto fino — os modelos recentes e
 o lado do "recuso por precaução". Ser honesto sobre limitações é parte do design: Claude
 admite quando não sabe, em vez de inventar com confiança.
 
-<reesecrever: elaborar em nova sessão>
-Infelizmente, ultimamente, com advento do Fable 5, as coisas j;a não são claras para o usuário, e a tendência é ficar ainda pior, enquanto Governos correm para regular e restrigir o uso de IA, diferentes Governos terão diferentes legislações. A solução é uma IA etremamente restrita ou cada Governo ter sua própria IA.
-
-</reescrever>
+Vale registrar que esse equilíbrio — ser útil sem ser perigoso — deixou de ser apenas uma decisão
+de engenharia e virou também questão de política pública. À medida que os modelos ficam mais
+capazes, governos correm para regular e, em alguns casos, restringir o acesso a IA de fronteira, e
+cada jurisdição tende a adotar regras próprias. O rumo provável é de fragmentação: em vez de um
+punhado de modelos globais disponíveis a todos, é plausível um cenário de modelos fortemente
+restritos, ou de "IAs soberanas" desenvolvidas ou homologadas país a país. Para quem constrói
+sobre Claude, isso tem uma consequência concreta — a disponibilidade de um modelo pode depender de
+onde você e o seu usuário estão, e essa é uma variável a acompanhar, não a supor estável.
 
 ### Linhagem de Modelos Disponíveis
 
@@ -177,19 +207,25 @@ ativos, com suas características de referência:
 
 Há ainda o **Claude Mythos 5**, que tem as mesmas capacidades, preço e comportamento de API
 do Fable 5, mas só é acessível através de um programa específico (Project Glasswing). Para
-quase todo mundo, o "modelo mais capaz" ia ser o Fable 5, até o Governo dos Estadudos UNidos Restringir o acesso.
+quase todo mundo, o "modelo mais capaz" é o Fable 5 — onde ele estiver disponível, já que
+restrições de acesso impostas por governos podem alterar essa conta conforme a região.
 
-<melhorar críticas: contexto nao está completo, qual o objetivo disto aqui?>
-Um detalhe que economiza dor de cabeça: os identificadores de modelo são strings exatas
-(`claude-opus-4-8`, `claude-sonnet-4-6`, `claude-fable-5`). Não invente sufixos de data nem
-"melhore" o nome — um ID errado simplesmente devolve erro 404.
-</melhorar>
+Um detalhe operacional fecha esta seção, porque é onde a escolha de modelo encontra o teclado: na
+API, cada modelo é referenciado por um **identificador exato**, uma string como `claude-opus-4-8`,
+`claude-sonnet-4-6` ou `claude-fable-5`. Não adianta inventar sufixos de data nem "arredondar" o
+nome — um ID que não bate exatamente devolve **erro 404**, e esse é um dos tropeços mais comuns de
+quem está começando. Guarde a ideia: ela reaparece no Capítulo 7, no diagnóstico de erros da API.
 
 Quanto ao **roadmap e futuro**: a Anthropic libera modelos novos com regularidade, e a regra
 prática é "use o mais recente da sua faixa, a menos que tenha um motivo explícito para fixar
 um antigo". Modelos antigos são aposentados com aviso prévio e passam a devolver erro.
 
-<exclarecer: existe um roadmap?>
+E existe um roadmap público? Não no sentido de um cronograma detalhado do que vem pela frente: a
+Anthropic não divulga datas nem nomes de modelos futuros, e anuncia cada geração quando ela fica
+pronta. O que dá para tratar como certo é a _direção_ — janelas de contexto maiores, raciocínio
+mais forte, melhor uso de ferramentas e de memória — e a _cadência_, que é alta. Por isso a regra
+prática não é prever o próximo modelo, e sim projetar o seu sistema para trocar de modelo com
+facilidade (veja o guia de migração no Capítulo 7).
 
 ## Plataformas e Interfaces
 
