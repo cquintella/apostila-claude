@@ -186,6 +186,8 @@ Quanto ao **roadmap e futuro**: a Anthropic libera modelos novos com regularidad
 prática é "use o mais recente da sua faixa, a menos que tenha um motivo explícito para fixar
 um antigo". Modelos antigos são aposentados com aviso prévio e passam a devolver erro.
 
+<exclarecer: existe um roadmap?>
+
 ## Plataformas e Interfaces
 
 O mesmo motor está disponível por várias portas de entrada. Escolher a porta certa é uma
@@ -297,13 +299,6 @@ completa demore. E há a assimetria fundamental de custo: **tokens de saída cus
 mais que tokens de entrada** (veja a tabela de preços acima). Otimizar uma aplicação quase
 sempre significa, antes de tudo, controlar o volume de tokens de saída.
 
-### Resumo do Capítulo 1
-
-Um LLM é um previsor de próximo token; toda a "inteligência" emerge daí. Tokens são a moeda
-e a unidade de memória. O LLM é o motor, o chatbot é o carro. Claude é a família da Anthropic,
-desenhada com segurança em primeiro lugar, e dividida em modelos por faixa de
-custo/capacidade. Escolha a plataforma pela tarefa e o modelo pelo orçamento. Entrada barata,
-saída cara, e latência dominada pela primeira etapa.
 
 ---
 
@@ -423,12 +418,6 @@ Em produção, instrumente: rastreie desempenho, monitore custo por requisição
 dashboards de qualidade. Tratar prompts como código — versionados, testados, monitorados — é
 o que separa um protótipo de um sistema confiável.
 
-### Resumo do Capítulo 2
-
-Estruture o prompt em papel, tarefa, contexto e formato. Clareza, exemplos e instruções
-negativas resolvem a maior parte. Para raciocínio complexo, use chain-of-thought ou o
-raciocínio adaptativo com o nível de esforço apropriado. E trate a melhoria de prompts como
-engenharia: meça, itere uma variável por vez, registre.
 
 ---
 
