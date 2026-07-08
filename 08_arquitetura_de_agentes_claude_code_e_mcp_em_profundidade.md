@@ -125,10 +125,7 @@ E o **README**? Claude _não_ carrega o `README.md` automaticamente no system pr
 
 ### Slash commands
 
-Um **slash command** é um prompt reutilizável que você invoca digitando uma barra (`/review`, por exemplo). Você define um deles soltando um arquivo Markdown em `.claude/commands`. O corpo do arquivo é o prompt injetado quando o comando roda; o **front matter YAML** no topo é onde você restringe o comportamento. O campo **`allowed-tools`** limita quais ferramentas o comando pode chamar — um comando de revisão pode ser travado em ferramentas somente-leitura (`read`, `grep`), sem acesso a `write` ou `bash`. O campo **`argument-hint`** é o placeholder mostrado no seletor, documentando que argumento o comando espera.
-
-> [!tip] Comandos essenciais — cheatsheet
-> Os comandos embutidos mais usados (`/init`, `/config`, `/status`, `/cost`, `/compact`, `/clear`, `/permissions`, `/hooks`, `/model`, `/output-style`) estão reunidos numa tabela de referência no **Capítulo 3**. A lista completa e sempre atualizada fica na documentação oficial: [slash commands](https://docs.claude.com/en/docs/claude-code/slash-commands) e a [referência de CLI](https://docs.claude.com/en/docs/claude-code/cli-reference).
+A referência completa dos comandos — a tabela dos embutidos (`/init`, `/config`, `/cost`, `/compact`…) e o passo a passo para **criar comandos próprios** (arquivo Markdown em `.claude/commands`, front matter YAML, `allowed-tools`, `argument-hint`) — está consolidada no **Capítulo 3**. O que importa reter aqui, pelo ângulo da arquitetura e do exame: um slash command é um **prompt reutilizável e versionado**, e o campo **`allowed-tools`** o transforma numa ferramenta com **privilégio mínimo** — um comando de revisão travado em `Read`/`Grep`, sem `Write` nem `Bash`, não pode causar dano mesmo que o prompt escorregue. É a mesma disciplina de permissões do `settings.json`, aplicada por comando.
 
 ### Execução headless em CI/CD
 

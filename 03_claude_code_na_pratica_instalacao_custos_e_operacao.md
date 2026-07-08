@@ -80,6 +80,28 @@ Os comandos são digitados com barra (`/`) dentro do console. Os que você mais 
 
 A lista completa e sempre atualizada está na documentação oficial: [slash commands](https://docs.claude.com/en/docs/claude-code/slash-commands) e [referência de CLI](https://docs.claude.com/en/docs/claude-code/cli-reference).
 
+### Criando seus próprios comandos
+
+Além dos embutidos, você pode definir **slash commands próprios** — prompts reutilizáveis que viram um comando com barra. Basta soltar um arquivo Markdown em **`.claude/commands/`** (por projeto) ou em `~/.claude/commands/` (pessoal): o nome do arquivo vira o nome do comando (`revisar.md` → `/revisar`), e o **corpo do arquivo é o prompt** injetado quando o comando roda. Um `$ARGUMENTS` no corpo é substituído pelo que você digitar depois do comando.
+
+O **front matter YAML** no topo restringe o comportamento. Os dois campos mais úteis:
+
+- **`allowed-tools`** — limita quais ferramentas o comando pode chamar. Um comando de revisão pode ser travado em ferramentas só-leitura (`Read`, `Grep`), sem `Write` nem `Bash`.
+- **`argument-hint`** — o placeholder mostrado no seletor, documentando que argumento o comando espera.
+
+Um exemplo, `.claude/commands/revisar.md`:
+
+```markdown
+---
+allowed-tools: Read, Grep, Glob
+argument-hint: [arquivo ou pasta]
+---
+Revise $ARGUMENTS focando em segurança e concorrência.
+Liste os problemas do mais grave ao menos grave; não altere nenhum arquivo.
+```
+
+Depois é só digitar `/revisar src/auth.ts`. Como o comando está versionado no repositório, ele vira uma **ferramenta compartilhada do time** — todo mundo revisa do mesmo jeito. (O papel dos comandos na arquitetura do agente e no exame CCA-F reaparece no Capítulo 8.)
+
 ## O mapa dos arquivos de configuração
 
 Antes de configurar, vale ter o mapa de _onde cada coisa mora_. Claude Code separa **configuração operacional** (JSON, em `settings.json`) de **instruções em linguagem natural** (Markdown, em `CLAUDE.md`), e cada uma tem uma versão **pessoal** (na sua home, nunca versionada) e uma **de projeto** (no repositório, versionada e compartilhada com o time).
