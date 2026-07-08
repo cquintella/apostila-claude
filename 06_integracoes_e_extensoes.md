@@ -70,9 +70,9 @@ Na prática: o Graphify pende para o lado *agente/economia*; o understand-anythi
 
 Conectar Claude a ferramentas que você já usa multiplica o valor. O padrão se repete: cada plataforma exige um setup básico e abre alguns casos de uso reais.
 
-O **Zapier** e o **Make (Integromat)** são plataformas de automação sem código. Com elas, você liga Claude a centenas de apps — processar e-mails recebidos, extrair dados de formulários, automatizar fluxos. Zapier tende a ser mais simples; Make oferece mais controle e templates prontos para fluxos complexos. A escolha entre os dois é uma questão de gosto e de complexidade do workflow.
+O **[Zapier](https://zapier.com)** e o **[Make (Integromat)](https://www.make.com)** são plataformas de automação sem código. Com elas, você liga Claude a centenas de apps — processar e-mails recebidos, extrair dados de formulários, automatizar fluxos. Zapier tende a ser mais simples; Make oferece mais controle e templates prontos para fluxos complexos. A escolha entre os dois é uma questão de gosto e de complexidade do workflow.
 
-A **integração com Google Workspace** cobre o trio Gmail (processar e classificar e-mails), Google Docs (criar e editar documentos) e Google Sheets (analisar e atualizar planilhas). O **Slack** permite bots customizados, integração direta e automação de canais — ótimo para levar Claude para onde o time já conversa. O **Notion** serve para popular bancos de dados, automatizar templates e gerar respostas. E o **GitHub** abre o code review automático, a automação de issues e a análise de pull requests.
+A integração com o **[Google Workspace](https://workspace.google.com)** cobre o trio Gmail (processar e classificar e-mails), Google Docs (criar e editar documentos) e Google Sheets (analisar e atualizar planilhas). O **[Slack](https://slack.com)** permite bots customizados, integração direta e automação de canais — ótimo para levar Claude para onde o time já conversa. O **[Notion](https://www.notion.com)** serve para popular bancos de dados, automatizar templates e gerar respostas. E o **[GitHub](https://github.com)** abre o code review automático, a automação de issues e a análise de pull requests.
 
 Para cada uma dessas, o conselho é o mesmo: comece com um caso de uso concreto e estreito, faça funcionar de ponta a ponta, e só então expanda.
 
@@ -102,9 +102,27 @@ Para integrações dirigidas por eventos, webhooks permitem que sistemas externo
 
 ### MCP (Model Context Protocol)
 
-O **MCP** é um protocolo aberto e padronizado para conectar Claude a fontes de dados e ferramentas externas. Em vez de cada integração reinventar a roda, um **MCP server** expõe capacidades (ler um banco, consultar uma API, acessar arquivos) de forma que qualquer cliente compatível — incluindo Claude — possa usar. Você pode criar servers customizados para suas próprias fontes.
+O MCP merece mais que um parágrafo, porque é a peça que mais mudou o jogo das integrações. É um **protocolo aberto** (publicado pela Anthropic no fim de 2024 e adotado desde então por vários fornecedores) para conectar modelos a ferramentas e fontes de dados — pense nele como um **"USB-C para IA"**: em vez de um adaptador diferente para cada combinação de modelo e sistema, um único padrão que qualquer cliente compatível fala. Um **MCP server** expõe capacidades — ler arquivos, consultar um banco, chamar uma API, abrir um navegador — e qualquer cliente compatível (Claude Code, Claude Desktop, Cursor, a sua própria aplicação) as usa sem cola específica.
 
-Dois detalhes valem ouro na prática, e ambos são aprofundados no Capítulo 8. Primeiro, o MCP tem **dois transportes**: o **STDIO**, para servers que rodam na mesma máquina do cliente (sem latência de rede nem autenticação), e o **SSE/HTTP**, para servers remotos (que exigem autenticação). A regra: STDIO quando o server pode viver localmente, remoto só quando precisa morar em outro lugar. Segundo, a **qualidade das descrições de ferramenta** decide se o modelo escolhe a tool certa — descreva-as como documentação de API, não como rótulos vagos. O MCP é a base sobre a qual integrações modernas e reutilizáveis são construídas, e o motivo de o ecossistema de extensões crescer tão rápido.
+**Exemplos de servidores prontos.** Boa parte do valor é não precisar escrever nada: já existem servidores mantidos pela Anthropic e pela comunidade para as fontes mais comuns —
+
+- **Filesystem** — ler e escrever arquivos locais com controle de acesso.
+- **Git / GitHub** — inspecionar repositórios, abrir issues e PRs, revisar código.
+- **PostgreSQL / SQLite** — consultar bancos (inclusive só-leitura, com inspeção de schema).
+- **Slack** — ler e postar em canais.
+- **Google Drive** — buscar e ler documentos.
+- **Fetch / web** — baixar e converter páginas para o modelo ler.
+- **Puppeteer / Playwright** — automatizar um navegador de verdade.
+- **Memory** — memória persistente em forma de grafo entre sessões.
+
+**Como adicionar um.** No Claude Code, o comando é direto — `claude mcp add <nome> -- <comando do servidor>` (servidores em TypeScript rodam via `npx`, os em Python via `uvx`) — ou você registra os servidores do projeto no arquivo **`.mcp.json`**, que viaja versionado com o repositório. Para descobrir o que já existe, há o repositório oficial de servidores e o **MCP Registry** (links nas referências).
+
+**Quando usar MCP — e quando não.** A regra prática:
+
+- **Use MCP** quando a integração vai ser **reaproveitada** — o mesmo conector servindo a vários assistentes e superfícies (Claude Code hoje, a sua app amanhã) — ou quando **já existe um servidor pronto** para a fonte de que você precisa (por que escrever um cliente de Postgres do zero se há um servidor MCP testado?). É a escolha certa para conectar o agente a sistemas de verdade de forma durável.
+- **Não use MCP** para uma **chamada única dentro do seu próprio código**: se você só precisa que a *sua* aplicação chame *uma* função uma vez, defina uma ferramenta comum na API e pronto — montar um servidor MCP aí é overhead sem retorno. O MCP compensa pela **reutilização**, não pela chamada isolada.
+
+O **mergulho técnico** — os dois transportes (STDIO local vs. remoto), como escrever descrições de ferramenta que o modelo entende, respostas de erro estruturadas e o ganho de escala N×M — está no **Capítulo 8**. Aqui basta guardar: o MCP é a base sobre a qual integrações modernas e reutilizáveis são construídas, e é por isso que o ecossistema de extensões cresce tão rápido.
 
 > [!note] E o prompt caching?
 > O *prompt caching* — reaproveitar o processamento de um prefixo grande e estável (system prompt, exemplos, um documento) por ~10% do custo — é uma técnica de **economia**, não de integração, e por isso vive no **Capítulo 7**, junto das demais alavancas de custo. Mencionamos aqui só para fechar o mapa: quando um MCP server ou uma skill injeta um bloco grande e fixo de contexto, esse bloco é um ótimo candidato a cache.
@@ -115,8 +133,11 @@ O modelo cru só gera texto, mas o Claude que você usa já vem embrulhado num h
 
 ## Referências
 
+- Anthropic, *Introducing the Model Context Protocol* — <https://www.anthropic.com/news/model-context-protocol>
 - Anthropic, *Model Context Protocol* (visão geral) — <https://docs.claude.com/en/docs/agents-and-tools/mcp>
-- *Model Context Protocol* — especificação oficial — <https://modelcontextprotocol.io>
+- *Model Context Protocol* — especificação e exemplos — <https://modelcontextprotocol.io> · <https://modelcontextprotocol.io/examples>
+- Servidores MCP (repositório oficial) e MCP Registry — <https://github.com/modelcontextprotocol/servers> · <https://registry.modelcontextprotocol.io>
+- Claude Code — configuração de MCP — <https://docs.claude.com/en/docs/claude-code/mcp>
 - Graphify (Safi Shamsi) — <https://github.com/safishamsi/graphify> · <https://graphify.net/>
 - understand-anything (plugin do Claude Code) — <https://github.com/Lum1104/Understand-Anything>
 - Anthropic, *Building Effective Agents* (workflows e orquestração) — <https://www.anthropic.com/engineering/building-effective-agents>

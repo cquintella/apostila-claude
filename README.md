@@ -36,6 +36,18 @@ Os capítulos seguem uma progressão pedagógica — da teoria à prática, ao a
 
 Para acompanhar na prática, o caminho mais barato é criar uma conta **Free** em [claude.ai](https://claude.ai) e, quando quiser usar o Claude Code de verdade, assinar o plano **Pro** — o Capítulo 3 explica os planos em detalhe. Se este material te ajudou, você pode criar sua conta por este link de indicação: **<https://claude.ai/referral/ZvWllcDXBg>**.
 
+## Guia de leitura rápida
+
+Não precisa ler tudo de uma vez. Escolha a trilha pelo seu objetivo:
+
+- **🟢 Só um overview / o básico** (comece por aqui) — **Capítulos 1 → 2 → 3**. Você entende o que é um LLM, o que é Claude (modelos e planos) e sai usando o Claude Code na prática. Se quiser já escrever prompts melhores, some o **Capítulo 4**. É o suficiente para 80% do uso do dia a dia.
+- **🔵 Usar bem no dia a dia** — a trilha básica **+ Capítulo 5** (playbook: como obter os melhores resultados) **e Capítulo 7** (controlar custo e latência).
+- **🟣 Construir com API, agentes e integrações** — **+ Capítulos 6** (integrações e MCP) **e 8** (arquitetura de agentes, o loop, o arnês). É também a trilha de quem se prepara para a certificação **CCA-F**.
+- **🔴 Levar para produção com responsabilidade** — **Capítulos 9** (diagnóstico, controles e segurança OWASP/MITRE) **e 10** (IP, compliance, ética e alinhamento).
+- **📖 Consulta rápida** — o **Apêndice** traz um glossário e os recursos essenciais.
+
+> Se você tem 30 minutos e só quer a ideia geral, leia os **resumos** ao fim dos Capítulos 1, 2 e 3.
+
 ## Autoria
 
 Carlos Alvaro de M. S. Quintella, em colaboração com o Claude (Anthropic).
