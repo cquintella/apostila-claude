@@ -229,7 +229,25 @@ API de faturamento em TypeScript. Monorepo pnpm.
 - Ler ou imprimir segredos (`.env`).
 ```
 
-Repare que não há prosa: cada linha é acionável. Comece pelo que o `/init` gerou e vá podando e afinando conforme percebe o agente errando — o `CLAUDE.md` é um documento vivo.
+Repare que não há prosa: cada linha é acionável. O `/init` gera um bom ponto de partida para você entender a estrutura, mas o conselho de quem escreve muitos `CLAUDE.md` é **não deixar o arquivo auto-gerado como versão final**: vale a pena escrevê-lo à mão, podando e afinando conforme percebe o agente errando — o `CLAUDE.md` é um documento vivo.
+
+### Menos é mais: o orçamento de instruções
+
+Vale aprofundar por que a concisão importa tanto, com alguns pontos pouco óbvios (bem destrinchados no artigo *"Writing a good CLAUDE.md"*, da HumanLayer). Um bom `CLAUDE.md` cobre três perguntas — o **QUÊ** (stack, estrutura, mapa do código), o **PORQUÊ** (o propósito do projeto e de cada parte) e o **COMO** (comandos de build, teste e verificação) — e nada além disso.
+
+O motivo de parar por aí é concreto: **modelos de fronteira seguem de forma confiável só cerca de 150–200 instruções**, e o system prompt do próprio Claude Code já consome umas ~50 delas. O que sobra para o seu `CLAUDE.md` é um **orçamento pequeno** — por isso a regra não é só "< 300 linhas", mas **idealmente abaixo de ~60**. Cada linha que não vale para *toda* sessão gasta esse orçamento à toa.
+
+E há um detalhe que muda a forma de escrever: **o Claude muitas vezes ignora o `CLAUDE.md`**. O system prompt instrui o modelo a descartar contexto irrelevante, então instruções que ele julga não se aplicarem à tarefa atual são simplesmente puladas — e, pior, **encher o arquivo de coisa irrelevante enfraquece o que importa**. Três consequências práticas:
+
+- **Só o que é universal.** Instrução específica de uma tarefa não vai no `CLAUDE.md`; vai numa **divulgação progressiva** — arquivos Markdown separados que o `CLAUDE.md` referencia e o agente lê só quando precisa:
+  ```
+  agent_docs/
+    building_the_project.md
+    running_tests.md
+    code_conventions.md
+  ```
+- **Estilo de código não é para o `CLAUDE.md`.** Não gaste instruções pedindo formatação ao modelo; deixe isso para **linters e formatadores determinísticos** (rodados por hooks, como vimos). É mais confiável e não custa orçamento.
+- **Linhas ruins cascateiam.** Como o `CLAUDE.md` entra em toda sessão, uma linha mal escrita contamina a pesquisa, o plano e o código — em todas as tarefas, o tempo todo. É o maior multiplicador de qualidade (para o bem e para o mal) da sua configuração.
 
 ## Gerenciamento de custos e contexto na CLI
 
@@ -290,6 +308,14 @@ Rotinas recorrentes não precisam de gatilho humano. O Claude Code permite **age
 A produtividade sobe quando o Claude Code convive com o seu ambiente de desenvolvimento. Rodar o console no **terminal embutido do VS Code ou do Cursor** dá feedback visual imediato na árvore de arquivos: você vê o agente ler e modificar o código enquanto acompanha os testes. Há ainda extensões de IDE dedicadas que aprofundam essa integração.
 
 Para sessões longas ou conexões remotas instáveis, o multiplexador **`tmux`** garante a persistência: a sessão do Claude Code sobrevive a uma queda de SSH e você alterna facilmente entre o painel do agente e a compilação manual. É o detalhe operacional que evita perder uma tarefa de uma hora por causa de uma rede ruim.
+
+## Referências
+
+- Anthropic, *Claude Code — visão geral e instalação* — <https://code.claude.com/docs/en/overview>
+- Anthropic, *Claude Code — settings.json* — <https://code.claude.com/docs/en/settings>
+- Anthropic, *Claude Code — hooks* — <https://code.claude.com/docs/en/hooks>
+- Anthropic, *Referência de comandos* e *CLI* — <https://code.claude.com/docs/en/commands> · <https://code.claude.com/docs/en/cli-reference>
+- Kyle (HumanLayer), *Writing a good CLAUDE.md* (2025) — <https://www.humanlayer.dev/blog/writing-a-good-claude-md>
 
 ### Resumo do Capítulo 3
 

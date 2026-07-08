@@ -49,11 +49,18 @@
 
 Esta apostila é um documento vivo. Erros, omissões e sugestões de melhoria são bem-vindos — o campo de IA, e Claude em particular, evolui rápido o suficiente para que nenhuma apostila fique "pronta" por muito tempo. Ao reportar um problema, indique o capítulo e a seção, descreva o que está incorreto ou faltando, e, se possível, proponha a correção. Modelos, preços e recursos mudam; manter o material atualizado é trabalho coletivo.
 
-## Direitos e Uso (Anti-Copyright)
+## Licença — CC BY 4.0 (uso livre com atribuição)
 
-> **Anti-copyright — uso livre.** Esta obra é liberada deliberadamente de qualquer
-> restrição de copyright. Você pode copiar, redistribuir, adaptar, traduzir, imprimir e
-> reutilizar este material — no todo ou em parte, para qualquer fim, inclusive comercial —
-> sem pedir permissão e sem pagar nada. Não há direitos reservados. A atribuição aos
-> autores é apreciada, mas não é obrigatória. O conhecimento aqui reunido pertence a quem
-> quiser usá-lo: copie à vontade.
+> **Uso livre, com crédito ao original.** Esta obra está licenciada sob a
+> **Creative Commons Atribuição 4.0 Internacional (CC BY 4.0)**. Você pode **copiar,
+> redistribuir, adaptar, traduzir, imprimir e reutilizar** este material — no todo ou em
+> parte, para qualquer fim, **inclusive comercial** — sem pedir permissão e sem pagar
+> nada, **desde que dê o devido crédito ao material original**: cite o autor, indique se
+> houve mudanças e forneça o link para a fonte. Não use a atribuição de forma que sugira
+> que os autores endossam você ou seu uso.
+>
+> **Atribuição sugerida:** "*Apostila Completa de Claude*, de Carlos Alvaro de M. S.
+> Quintella (com Claude/Anthropic) — <https://github.com/cquintella/apostila-claude> —
+> licenciada sob CC BY 4.0."
+>
+> Texto completo da licença: <https://creativecommons.org/licenses/by/4.0/>.

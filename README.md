@@ -52,8 +52,10 @@ Não precisa ler tudo de uma vez. Escolha a trilha pelo seu objetivo:
 
 Carlos Alvaro de M. S. Quintella, em colaboração com o Claude (Anthropic).
 
-## Licença — Anti-copyright, uso livre
+## Licença — CC BY 4.0 (uso livre com atribuição)
 
-Esta obra é liberada deliberadamente de qualquer restrição de copyright. Você pode **copiar, redistribuir, adaptar, traduzir, imprimir e reutilizar** este material — no todo ou em parte, para qualquer fim, inclusive comercial — sem pedir permissão e sem pagar nada. Não há direitos reservados. A atribuição aos autores é apreciada, mas não é obrigatória.
+Esta obra está licenciada sob a **[Creative Commons Atribuição 4.0 Internacional (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)**. Você pode **copiar, redistribuir, adaptar, traduzir, imprimir e reutilizar** este material — no todo ou em parte, para qualquer fim, **inclusive comercial** — sem pedir permissão e sem pagar nada, **desde que dê o devido crédito ao material original** (cite o autor, indique se houve mudanças e forneça o link para a fonte) e não sugira que os autores endossam você ou seu uso.
+
+**Atribuição sugerida:** *"Apostila Completa de Claude*, de Carlos Alvaro de M. S. Quintella (com Claude/Anthropic) — https://github.com/cquintella/apostila-claude — licenciada sob CC BY 4.0."
 
 > *Nota sobre atualidade:* o campo evolui rápido. Modelos, preços, termos e leis mudam; o texto reflete o cenário até meados de 2026, e cada capítulo aponta as fontes oficiais para consulta atualizada.
