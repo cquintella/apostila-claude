@@ -109,6 +109,28 @@ E quando um subagente falha no meio, a recuperação certa é quase sempre um **
 > [!example] Um loop útil: consertar testes até passarem
 > O exemplo canônico de laço bem desenhado é a **correção de testes**. O objetivo — "a suíte inteira passa" — vive em disco (o próprio resultado dos testes), não na cabeça do modelo. A cada volta: (1) rodar os testes; (2) se todos passam, **`end_turn`** — parada por evidência concreta; (3) se algum falha, ler a mensagem de erro, editar o código e voltar ao passo 1. As cinco disciplinas aparecem todas: a **condição de parada** é objetiva (testes verdes, não "acho que resolvi"); há um **teto de iterações** para não girar para sempre se um teste for impossível; cada volta **verifica** (rodar o teste é o portão); e o trabalho é naturalmente **idempotente**. Troque "testes" por "lint limpo", "build sem erro" ou "todos os itens do `feature_list.json` marcados" e você tem o mesmo esqueleto — é o loop operacional detalhado no fim do capítulo.
 
+### Times de agentes (agent teams)
+
+Os subagentes têm um limite: eles só **reportam de volta ao agente principal** e não conversam entre si. Quando o trabalho pede que vários agentes **discutam, desafiem as descobertas uns dos outros e se coordenem sozinhos**, o Claude Code oferece um recurso mais recente — e ainda **experimental** — os **times de agentes** (*agent teams*).
+
+Num time, uma sessão vira o **líder** (*lead*): coordena, distribui tarefas e sintetiza os resultados. Os **colegas** (*teammates*) são **sessões independentes do Claude Code**, cada uma com a própria janela de contexto, que trabalham em paralelo, **compartilham uma lista de tarefas** e **trocam mensagens diretamente** entre si (por um "mailbox"). Você também pode falar com cada colega individualmente, sem passar pelo líder — o que os subagentes não permitem.
+
+A diferença para os subagentes, lado a lado:
+
+| | Subagentes | Times de agentes |
+| --- | --- | --- |
+| **Contexto** | Janela própria; o resultado volta ao chamador | Janela própria; totalmente independentes |
+| **Comunicação** | Só reportam ao agente principal | Colegas mensageiam uns aos outros |
+| **Coordenação** | O agente principal gerencia tudo | Lista de tarefas compartilhada, auto-coordenação |
+| **Melhor para** | Tarefas focadas em que só o resultado importa | Trabalho que exige discussão e colaboração |
+| **Custo de tokens** | Menor (resumo volta ao contexto) | Maior (cada colega é uma instância separada) |
+
+**Quando usar.** Times brilham onde a **exploração paralela agrega valor real**: revisão de PR por vários ângulos (segurança, performance, testes) ao mesmo tempo; investigação de bug com **hipóteses concorrentes** — colegas tentando refutar uns aos outros, como um debate científico, o que combate o viés de ancoragem de um investigador solitário; features novas em que cada colega é dono de um módulo; e mudanças que atravessam frontend/backend/testes. **Quando não usar:** tarefas sequenciais, edições no mesmo arquivo, ou trabalho com muitas dependências — aí um único agente ou subagentes saem mais baratos e simples. E lembre: um time gasta **muito mais tokens** que uma sessão só.
+
+**Como funciona, na prática.** Por ser experimental, vem **desligado por padrão** — habilite com a variável `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` no `settings.json` ou no ambiente. Depois, você descreve a tarefa e os colegas em **linguagem natural** ("gere três colegas para revisar o PR #142: um em segurança, um em performance, um em cobertura de testes"), e o líder gera os colegas, popula a lista de tarefas compartilhada e sintetiza no fim. A arquitetura tem quatro peças: **líder**, **colegas**, **lista de tarefas compartilhada** (com dependências e trava de arquivo para evitar corrida) e **mailbox**. A exibição pode ser **in-process** (todos no mesmo terminal, navegados por setas no painel de agentes) ou em **painéis divididos** (via `tmux` ou iTerm2). Dá para exigir **aprovação de plano** antes de um colega implementar, e os **hooks** `TeammateIdle`, `TaskCreated` e `TaskCompleted` impõem portões de qualidade sobre o time.
+
+**Boas práticas:** comece com **3–5 colegas** (além disso, a coordenação come o ganho); dê **contexto suficiente** no prompt de spawn (o colega carrega o `CLAUDE.md`, mas **não herda o histórico** do líder); **dimensione as tarefas** como unidades autocontidas com entregável claro; **evite conflito de arquivos** (cada colega dono de arquivos diferentes); e comece por **pesquisa e revisão**, que mostram o valor sem os percalços da implementação paralela. É um recurso poderoso, mas ainda com arestas (sem retomada de sessão para colegas in-process, um time por sessão, sem times aninhados) — trate-o pelo que é: experimental e caro, valioso quando o paralelismo genuíno compensa.
+
 ## Configuração do Claude Code
 
 O Claude Code roda Claude direto dentro do seu repositório e, por padrão, **cada nova sessão começa sem nenhuma memória do projeto**. O arquivo **`CLAUDE.md`** é o que conserta isso. Quando o Claude Code inicia, ele sobe a árvore de diretórios a partir da pasta atual, encontra todo arquivo `CLAUDE.md` no caminho e os costura no _system prompt_ da sessão.
@@ -321,7 +343,8 @@ A segunda é a comoditização do próprio arnês. Ferramentas como o **Pi** (de
 **Claude Code, MCP e saída estruturada**
 
 - Anthropic, *Model Context Protocol* — <https://docs.claude.com/en/docs/agents-and-tools/mcp> · especificação: <https://modelcontextprotocol.io>
-- Anthropic, *Claude Code — slash commands e CLI* — <https://docs.claude.com/en/docs/claude-code/slash-commands> · <https://docs.claude.com/en/docs/claude-code/cli-reference>
+- Anthropic, *Claude Code — comandos e CLI* — <https://code.claude.com/docs/en/commands> · <https://code.claude.com/docs/en/cli-reference>
+- Anthropic, *Claude Code — Agent teams* (times de agentes) — <https://code.claude.com/docs/en/agent-teams>
 
 **Certificação e formação**
 
@@ -336,6 +359,6 @@ A segunda é a comoditização do próprio arnês. Ferramentas como o **Pi** (de
 
 ### Resumo do Capítulo 8
 
-Claude é uma API stateless embaixo de quatro camadas de produto — API, Agent SDK, Claude Code e MCP — e quase todo problema de arquitetura é descobrir qual camada é dona do comportamento quebrado. Ortogonal a elas, a pilha de responsabilidade de todo sistema agêntico tem seis camadas — Governance & Audit, Evaluation Gates, Harness Orchestration, Tools/MCP, Context Engineering e Model Layer — e um agente que falha em produção quase sempre deixou uma delas sem dono. O loop agêntico é o seu código inspecionando `stop_reason` e anexando `tool_result` — um laço interno por tarefa que casa com um laço externo autônomo entre sessões, e ambos só são seguros com teto de iterações, condição de parada em disco e verificação a cada volta; subagentes existem para poupar contexto, com decomposição sequencial ou adaptativa e retry só do que falhou. No Claude Code, regras vão na camada certa do `CLAUDE.md` e comandos são travados por `allowed-tools`. Saída confiável vem de declarar o schema como tool com `tool_choice` mais um loop de validação e retry. Boas ferramentas têm descrições de doc de API, erros estruturados e o transporte certo (STDIO local, SSE remoto). E confiabilidade é reancorar fatos duráveis contra o "perdido no meio", cachear só o estável e escalar para humano quando a confiança cai. Por baixo de tudo está o arnês: a infraestrutura que torna o loop confiável. É essa a trilha que o exame CCA-F cobra — e que você passa por já ter construído cada peça.
+Claude é uma API stateless embaixo de quatro camadas de produto — API, Agent SDK, Claude Code e MCP — e quase todo problema de arquitetura é descobrir qual camada é dona do comportamento quebrado. Ortogonal a elas, a pilha de responsabilidade de todo sistema agêntico tem seis camadas — Governance & Audit, Evaluation Gates, Harness Orchestration, Tools/MCP, Context Engineering e Model Layer — e um agente que falha em produção quase sempre deixou uma delas sem dono. O loop agêntico é o seu código inspecionando `stop_reason` e anexando `tool_result` — um laço interno por tarefa que casa com um laço externo autônomo entre sessões, e ambos só são seguros com teto de iterações, condição de parada em disco e verificação a cada volta; subagentes existem para poupar contexto, com decomposição sequencial ou adaptativa e retry só do que falhou — e, quando os agentes precisam conversar entre si, os times de agentes (experimentais) sobem disso com lista de tarefas compartilhada e mensagens diretas. No Claude Code, regras vão na camada certa do `CLAUDE.md` e comandos são travados por `allowed-tools`. Saída confiável vem de declarar o schema como tool com `tool_choice` mais um loop de validação e retry. Boas ferramentas têm descrições de doc de API, erros estruturados e o transporte certo (STDIO local, SSE remoto). E confiabilidade é reancorar fatos duráveis contra o "perdido no meio", cachear só o estável e escalar para humano quando a confiança cai. Por baixo de tudo está o arnês: a infraestrutura que torna o loop confiável. É essa a trilha que o exame CCA-F cobra — e que você passa por já ter construído cada peça.
 
 ---

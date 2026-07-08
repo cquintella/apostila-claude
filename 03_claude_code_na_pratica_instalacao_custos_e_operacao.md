@@ -78,7 +78,7 @@ Os comandos são digitados com barra (`/`) dentro do console. Os que você mais 
 | `/plugin` | Gerencia plugins e o marketplace |
 | `/help` | Lista todos os comandos disponíveis |
 
-A lista completa e sempre atualizada está na documentação oficial: [slash commands](https://docs.claude.com/en/docs/claude-code/slash-commands) e [referência de CLI](https://docs.claude.com/en/docs/claude-code/cli-reference).
+A lista completa e sempre atualizada está na documentação oficial: [referência de comandos](https://code.claude.com/docs/en/commands) e [referência de CLI](https://code.claude.com/docs/en/cli-reference).
 
 ### Criando seus próprios comandos
 
@@ -101,6 +101,9 @@ Liste os problemas do mais grave ao menos grave; não altere nenhum arquivo.
 ```
 
 Depois é só digitar `/revisar src/auth.ts`. Como o comando está versionado no repositório, ele vira uma **ferramenta compartilhada do time** — todo mundo revisa do mesmo jeito. (O papel dos comandos na arquitetura do agente e no exame CCA-F reaparece no Capítulo 8.)
+
+> [!note] Comandos e skills
+> Nas versões recentes do Claude Code, os comandos customizados foram **unificados às [skills](https://code.claude.com/docs/en/skills)**: um arquivo em `.claude/commands/deploy.md` e uma skill em `.claude/skills/deploy/SKILL.md` criam o mesmo `/deploy` e funcionam igual. Os arquivos em `.claude/commands/` continuam válidos; a skill só adiciona recursos extras (pasta de arquivos de apoio e carregamento automático quando relevante).
 
 ## O mapa dos arquivos de configuração
 
