@@ -105,6 +105,38 @@ Depois é só digitar `/revisar src/auth.ts`. Como o comando está versionado no
 > [!note] Comandos e skills
 > Nas versões recentes do Claude Code, os comandos customizados foram **unificados às [skills](https://code.claude.com/docs/en/skills)**: um arquivo em `.claude/commands/deploy.md` e uma skill em `.claude/skills/deploy/SKILL.md` criam o mesmo `/deploy` e funcionam igual. Os arquivos em `.claude/commands/` continuam válidos; a skill só adiciona recursos extras (pasta de arquivos de apoio e carregamento automático quando relevante).
 
+### Criando uma skill
+
+Criar uma skill é simples: é **uma pasta com um arquivo `SKILL.md`** dentro. O `SKILL.md` tem duas partes — um **front matter YAML** com dois campos obrigatórios e um **corpo em Markdown** com as instruções que o Claude segue quando a skill está ativa. A pasta vai em `.claude/skills/<nome>/` (por projeto, versionada) ou em `~/.claude/skills/<nome>/` (pessoal). O esqueleto:
+
+```markdown
+---
+name: nome-da-skill
+description: Descrição clara do que a skill faz e quando usá-la
+---
+
+# Nome da Skill
+
+[Instruções que o Claude vai seguir quando esta skill estiver ativa.]
+
+## Exemplos
+- Exemplo de uso 1
+- Exemplo de uso 2
+
+## Diretrizes
+- Diretriz 1
+- Diretriz 2
+```
+
+Os dois campos do front matter:
+
+- **`name`** — um identificador único (minúsculas, hífens no lugar de espaços).
+- **`description`** — o campo que mais importa: é por ele que o Claude decide **quando** ativar a skill automaticamente. Descreva **o que a skill faz _e_ em que situação usá-la** ("Gera um CHANGELOG a partir dos commits desde a última tag; use ao preparar um release"). Uma descrição vaga faz a skill nunca disparar na hora certa.
+
+O corpo carrega as instruções, exemplos e diretrizes. E aqui está o ganho de arquitetura (Capítulo 7): a skill **só entra no contexto quando o gatilho a ativa** — material de referência longo custa quase nada até ser usado, ao contrário do `CLAUDE.md`, que é pago em toda sessão. É por isso que "mova o detalhe para uma skill" é o conselho recorrente para manter o `CLAUDE.md` enxuto.
+
+O jeito mais rápido de começar é copiar a **`template-skill`** do repositório [`anthropics/skills`](https://github.com/anthropics/skills) e adaptar; a documentação de [skills](https://code.claude.com/docs/en/skills) cobre os recursos avançados (controle de quem invoca, execução em subagente, injeção de contexto dinâmico).
+
 ## O mapa dos arquivos de configuração
 
 Antes de configurar, vale ter o mapa de _onde cada coisa mora_. Claude Code separa **configuração operacional** (JSON, em `settings.json`) de **instruções em linguagem natural** (Markdown, em `CLAUDE.md`), e cada uma tem uma versão **pessoal** (na sua home, nunca versionada) e uma **de projeto** (no repositório, versionada e compartilhada com o time).
