@@ -123,7 +123,7 @@ Antes de configurar, vale ter o mapa de _onde cada coisa mora_. Claude Code sepa
 
 A regra de ouro que atravessa a tabela inteira: **o que é seu vai na home (`~/.claude/`) e nunca entra no Git; o que é do time vai no repositório e é commitado**. Confundir os dois é o erro clássico — pôr uma convenção do time no seu arquivo pessoal significa que o clone do colega nunca a verá.
 
-Para **skills globais** (uma habilidade de administração de sistemas, um padrão de revisão que você usa em todo projeto), o lugar é `~/.claude/skills/`, disponível em qualquer sessão sem repetir instruções. Bons pontos de partida para encontrar skills e configurações prontas são os repositórios da comunidade — as listas *Awesome Claude Code* no GitHub e o próprio marketplace de plugins do Claude Code (`/plugin`) reúnem coleções mantidas ativamente.
+Para **skills globais** (uma habilidade de administração de sistemas, um padrão de revisão que você usa em todo projeto), o lugar é `~/.claude/skills/`, disponível em qualquer sessão sem repetir instruções. Para se inspirar e ver o formato pasta + `SKILL.md` na prática, o melhor ponto de partida é o **repositório oficial de skills da Anthropic** ([`anthropics/skills`](https://github.com/anthropics/skills)) — traz desde as skills de criação de documentos (PDF, DOCX, PPTX, XLSX) até exemplos criativos, técnicos e de workflow. Além dele, as listas *Awesome Claude Code* da comunidade e o marketplace de plugins do Claude Code (`/plugin`) reúnem coleções mantidas ativamente.
 
 ## O arquivo `settings.json` na prática
 
@@ -314,6 +314,7 @@ Para sessões longas ou conexões remotas instáveis, o multiplexador **`tmux`**
 - Anthropic, *Claude Code — visão geral e instalação* — <https://code.claude.com/docs/en/overview>
 - Anthropic, *Claude Code — settings.json* — <https://code.claude.com/docs/en/settings>
 - Anthropic, *Claude Code — hooks* — <https://code.claude.com/docs/en/hooks>
+- Anthropic, *Skills* (repositório oficial de skills de exemplo) — <https://github.com/anthropics/skills>
 - Anthropic, *Referência de comandos* e *CLI* — <https://code.claude.com/docs/en/commands> · <https://code.claude.com/docs/en/cli-reference>
 - Kyle (HumanLayer), *Writing a good CLAUDE.md* (2025) — <https://www.humanlayer.dev/blog/writing-a-good-claude-md>
 

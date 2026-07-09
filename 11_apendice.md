@@ -43,6 +43,7 @@
 - **Anthropic Console** (<https://console.anthropic.com>) — painel de uso e custo, chaves de API e o *prompt workbench*.
 - **Comunidades** — Discord e Reddit dedicados, onde práticas e armadilhas circulam rápido.
 - **Ferramentas recomendadas** — Claude Code (a CLI `claude`), os SDKs oficiais da Anthropic (Python e TypeScript), e o Graphify (grafo de conhecimento para codebases).
+- **Skills de exemplo** — o repositório oficial `anthropics/skills` (<https://github.com/anthropics/skills>): skills de criação de documentos (PDF, DOCX, PPTX, XLSX) e exemplos criativos e técnicos, no formato pasta + `SKILL.md`.
 - **Segurança de LLM** — o OWASP Top 10 for LLM Applications (<https://genai.owasp.org/llm-top-10/>) e o MITRE ATLAS (<https://atlas.mitre.org/>) para modelar ameaças.
 
 ## Feedback e Contribuições
